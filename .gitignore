@@ -1,0 +1,23 @@
+# .gitignore
+
+# IDE и редакторы
+.idea/
+.vscode/
+
+# Файлы настроек
+local_settings.py
+*.sqlite3
+db.sqlite3
+
+# Статические файлы
+media/
+static/
+
+# Скомпилированные файлы Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Файлы отладки
+*.log
+*.swp
