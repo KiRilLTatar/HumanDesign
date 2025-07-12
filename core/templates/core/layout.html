@@ -1,0 +1,82 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Поток Судьбы - Консультации по Бацзы {% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'core/css/style_layout.css' %}"></link> 
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-water"></i>
+                    Поток Судьбы
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#about">О Бацзы</a></li>
+                    <li><a href="#chart">Карта Судьбы</a></li>
+                    <li><a href="#consult">Консультация</a></li>
+                    <li><a href="#contacts">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}
+
+    {% endblock %}
+    
+    <!-- Footer -->
+    <footer id="contacts">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Поток Судьбы</h3>
+                    <p>Консультации по китайской метафизике: Бацзы, Ци Мень Дун Цзя, Фэн-Шуй</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> info@potok-sudby.ru</li>
+                        <li><i class="fas fa-phone"></i> +7 (999) 888-77-66</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Санкт-Петербург, наб. реки Фонтанки, 45</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="#about">Философия Бацзы</a></li>
+                        <li><a href="#chart">Энергетическая карта</a></li>
+                        <li><a href="#consult">Консультация</a></li>
+                        <li><a href="#">Статьи</a></li>
+                        <li><a href="#">Вопросы и ответы</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Поток Судьбы. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'core/js/script.js' %}"></script>
+</body>
+</html>

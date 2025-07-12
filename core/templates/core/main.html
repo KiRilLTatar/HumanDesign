@@ -1,1 +1,161 @@
-{% extends "layout.html" %} 
+{% extends "core/layout.html" %}
+
+{% block title %} Поток Судьбы - Консультации по Бацзы {% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Раскройте тайны судьбы <span>через мудрость Воды</span></h1>
+                <p>Древнекитайская астрология Бацзы для понимания вашей энергии, потенциала и жизненного пути. Погрузитесь в глубину своих возможностей.</p>
+                <a href="#consult" class="btn">Начать путешествие</a>
+            </div>
+        </div>
+        <div class="waves"></div>
+        <div class="waves wave2"></div>
+        <div class="waves wave3"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Пять Элементов Бытия</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Философия Бацзы</h3>
+                    <p>Бацзы (八字) или "Четыре Столпа Судьбы" — это древняя китайская метафизическая система, основанная на взаимодействии пяти элементов: Воды, Дерева, Огня, Земли и Металла. Вода - источник жизни и символ мудрости в этой системе.</p>
+                    <p>Анализ вашей карты Бацзы помогает понять:</p>
+                    <ul>
+                        <li>Поток вашей жизненной энергии (Ци)</li>
+                        <li>Гармонию элементов в вашей природе</li>
+                        <li>Благоприятные периоды для важных решений</li>
+                        <li>Взаимодействие с окружающим миром</li>
+                        <li>Скрытые таланты и потенциал развития</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="elements">
+                <div class="element">
+                    <div class="element-icon water">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h4>Вода</h4>
+                    <p>Мудрость, адаптация, глубина</p>
+                </div>
+                <div class="element">
+                    <div class="element-icon wood">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h4>Дерево</h4>
+                    <p>Рост, творчество, гибкость</p>
+                </div>
+                <div class="element">
+                    <div class="element-icon fire">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h4>Огонь</h4>
+                    <p>Страсть, энергия, трансформация</p>
+                </div>
+                <div class="element">
+                    <div class="element-icon earth">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <h4>Земля</h4>
+                    <p>Стабильность, питание, практичность</p>
+                </div>
+                <div class="element">
+                    <div class="element-icon metal">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h4>Металл</h4>
+                    <p>Структура, ясность, эффективность</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bazi Chart Section -->
+    <section id="chart" class="section chart-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Карта Энергетических Вод</h2>
+            </div>
+            <div class="chart-container">
+                <p>Карта Бацзы состоит из четырех столпов, представляющих потоки энергии в разные периоды жизни. Как реки, они формируют ландшафт вашей судьбы.</p>
+                
+                <div class="bazi-chart">
+                    <div class="pillar">
+                        <div class="pillar-title">Год</div>
+                        <div class="pillar-content">
+                            <div class="heavenly-stem">壬</div>
+                        </div>
+                        <p>Истоки, предки, корни</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-title">Месяц</div>
+                        <div class="pillar-content">
+                            <div class="earthly-branch">子</div>
+                        </div>
+                        <p>Основное течение, карьера</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-title">День</div>
+                        <div class="pillar-content">
+                            <div class="heavenly-stem">癸</div>
+                        </div>
+                        <p>Глубины, личность, отношения</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-title">Час</div>
+                        <div class="pillar-content">
+                            <div class="earthly-branch">亥</div>
+                        </div>
+                        <p>Устье, наследие, итоги</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; text-align: center;">
+                    <a href="#consult" class="btn">Расчитать свою карту</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultation Section -->
+    <section id="consult" class="section consultation">
+        <div class="container">
+            <div class="section-title">
+                <h2>Путь к Гармонии</h2>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Источник</h3>
+                    <p>Укажите точную дату, время и место рождения для составления персональной карты</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Анализ течения</h3>
+                    <p>Исследование потоков энергии, элементов и их взаимодействий</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Навигация</h3>
+                    <p>Подробный отчет с рекомендациями на 90-минутной консультации</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <h3>Готовы отправиться в путешествие?</h3>
+                <p>Оставьте свои данные, и мы свяжемся с вами для записи на консультацию</p>
+                <a href="#contacts" class="btn" style="margin-top: 20px;">Начать сейчас</a>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
