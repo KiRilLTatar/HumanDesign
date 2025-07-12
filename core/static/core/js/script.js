@@ -1,9 +1,19 @@
+// Плавная прокрутка
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') {
+                    e.preventDefault();
+                    return;
+                }
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
         
@@ -44,3 +54,149 @@
         waves.forEach((wave, index) => {
             wave.style.animationDelay = `${index * 2}s`;
         });
+        
+        // Modal functionality
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const loginLink = document.getElementById('loginLink');
+        const registerLink = document.getElementById('registerLink');
+        const showLogin = document.getElementById('showLogin');
+        const showRegister = document.getElementById('showRegister');
+        const closeButtons = document.querySelectorAll('.close-modal');
+        
+        // Open login modal
+        loginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeAllModals();
+            loginModal.classList.add('active');
+        });
+        
+        // Open register modal
+        registerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeAllModals();
+            registerModal.classList.add('active');
+        });
+        
+        // Switch to register from login
+        showRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeAllModals();
+            registerModal.classList.add('active');
+        });
+        
+        // Switch to login from register
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeAllModals();
+            loginModal.classList.add('active');
+        });
+        
+        // Close modals
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                closeAllModals();
+            });
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                closeAllModals();
+            }
+            if (e.target === registerModal) {
+                closeAllModals();
+            }
+        });
+        
+        function closeAllModals() {
+            loginModal.classList.remove('active');
+            registerModal.classList.remove('active');
+        }
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById('registerForm');
+    if (!form) return;
+
+    const url = form.dataset.url;
+
+    form.onsubmit = function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: formData,
+            credentials: "same-origin"
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                modal.hide();
+                form.reset();
+                window.location.href = data.redirect_url;
+            } else {
+                const errors = data.errors || ["Ошибка регистрации"];
+                alert(errors.join("\n"));
+            }
+        })
+    };
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const loginForm = document.getElementById("loginForm");
+
+    if (loginForm) {
+        loginForm.onsubmit = function (e) {
+            e.preventDefault(); 
+
+            const url = loginForm.dataset.url; 
+            const formData = new FormData(loginForm); 
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+            })
+            .then((res) => res.json()) 
+            .then((data) => {
+                if (data.success) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
+                    modal.hide();
+
+                    loginForm.reset();
+
+                    window.location.reload();  
+
+                } else {
+                    
+                    document.getElementById("login-error").textContent = data.error;
+                }
+            })
+        };
+    }
+});

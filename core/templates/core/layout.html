@@ -26,6 +26,8 @@
                     <li><a href="#chart">Карта Судьбы</a></li>
                     <li><a href="#consult">Консультация</a></li>
                     <li><a href="#contacts">Контакты</a></li>
+                    <li><a href="#" id="loginLink">Вход</a></li>
+                    <li><a href="#" id="registerLink">Регистрация</a></li>
                 </ul>
             </nav>
         </div>
@@ -76,6 +78,70 @@
             </div>
         </div>
     </footer>
+
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Вход в Поток Судьбы</h2>
+            <form id="loginForm" method="post" data-url="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="loginEmail">Электронная почта</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="example@mail.ru" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Введите пароль" name="password" required>
+                </div>
+                <div class="form-footer">
+                    <div id="login-error" class="text-danger mb-3"></div>
+                    <button type="submit" class="btn">Войти</button>
+                    <a href="#" id="forgotPassword">Забыли пароль?</a>
+                </div>
+            </form>
+            <div class="switch-form">
+                <p>Ещё не с нами? <a href="#" id="showRegister">Зарегистрироваться</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="registerForm" method="post" data-url="{% url 'register' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="registerName">Имя</label>
+                    <input type="text" id="registerName" class="form-control" placeholder="Ваше имя"  name="username" required>
+                    <small id="username-feedback" class="text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Электронная почта</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="example@mail.ru"  name="email" required>
+                    <small id="email-feedback" class="text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Пароль</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Придумайте пароль" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirm">Подтверждение пароля</label>
+                    <input type="password" id="registerConfirm" class="form-control" placeholder="Повторите пароль" name="password2" required>
+                    <small id="password-feedback" class="text-danger"></small>
+                </div>
+                <div class="form-footer">
+                    <div id="form-errors" class="text-danger mb-3"></div>
+                    <button type="submit" class="btn">Зарегистрироваться</button>
+                </div>
+            </form>
+            <div class="switch-form">
+                <p>Уже есть аккаунт? <a href="#" id="showLogin">Войти</a></p>
+            </div>
+        </div>
+    </div>
+
 
     <script src="{% static 'core/js/script.js' %}"></script>
 </body>
