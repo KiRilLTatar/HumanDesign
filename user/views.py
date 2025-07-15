@@ -42,6 +42,12 @@ def login_acc(request):
         password = request.POST.get("password")
         user = authenticate(request, email=email, password=password)
 
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Пользователь не найден"})
+        
+        user = authenticate(request, username=user.username, password=password)
         if user is not None:
             login(request, user)
             return JsonResponse({"success": True, "redirect_url": "/"}) 
