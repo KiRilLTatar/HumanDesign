@@ -143,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(url, {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 "X-CSRFToken": getCookie("csrftoken")
             },
             body: formData,
@@ -152,7 +153,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             if (data.success) {
                 const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-                modal.hide();
+                closeAllModals();
+
                 form.reset();
                 window.location.href = data.redirect_url;
             } else {
@@ -181,12 +183,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     "X-Requested-With": "XMLHttpRequest",
                     "X-CSRFToken": getCookie("csrftoken")
                 },
+                credentials: "include"
             })
             .then((res) => res.json()) 
             .then((data) => {
                 if (data.success) {
                     const modal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
-                    modal.hide();
+                    closeAllModals();
 
                     loginForm.reset();
 

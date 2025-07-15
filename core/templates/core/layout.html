@@ -26,8 +26,12 @@
                     <li><a href="#chart">Карта Судьбы</a></li>
                     <li><a href="#consult">Консультация</a></li>
                     <li><a href="#contacts">Контакты</a></li>
-                    <li><a href="#" id="loginLink">Вход</a></li>
-                    <li><a href="#" id="registerLink">Регистрация</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}" id="logoutLink">Выход</a></li>
+                    {% else %}
+                        <li><a href="#" id="loginLink">Вход</a></li>
+                        <li><a href="#" id="registerLink">Регистрация</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
