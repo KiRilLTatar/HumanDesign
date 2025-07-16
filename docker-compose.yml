@@ -12,11 +12,11 @@ services:
   
   web: # сервис для джанго
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8080
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "8080:8080"
     depends_on:
       - postgres
     environment:
