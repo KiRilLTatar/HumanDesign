@@ -325,31 +325,32 @@
                 <p>Введите информацию максимально точно для получения достоверного результата.</p>
             </div>
             
-            <form id="baziForm">
+            <form id="baziForm" method="POST" data-url="{% url 'calc_badz' %}">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="fullName"><i class="fas fa-user"></i> Полное имя</label>
-                    <input type="text" id="fullName" class="form-control" placeholder="Иванов Иван Иванович" required>
+                    <input type="text" id="fullName" class="form-control" placeholder="Иванов Иван Иванович" name="name" required>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-col">
                         <div class="form-group">
                             <label for="birthDate"><i class="fas fa-calendar-day"></i> Дата рождения</label>
-                            <input type="date" id="birthDate" class="form-control" required>
+                            <input type="date" id="birthDate" class="form-control" name="birthDate" required>
                         </div>
                     </div>
                     
                     <div class="form-col">
                         <div class="form-group">
                             <label for="birthTime"><i class="fas fa-clock"></i> Время рождения</label>
-                            <input type="time" id="birthTime" class="form-control" required>
+                            <input type="time" id="birthTime" class="form-control" name="birthTime" required>
                         </div>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="birthPlace"><i class="fas fa-map-marker-alt"></i> Место рождения</label>
-                    <input type="text" id="birthPlace" class="form-control" placeholder="Город, страна" required>
+                    <input type="text" id="birthPlace" class="form-control" placeholder="Город, страна" name="birthPlace" required>
                 </div>
                 
                 <div class="form-group">
@@ -374,7 +375,7 @@
                 
                 <div class="form-group">
                     <label for="question"><i class="fas fa-question-circle"></i> Ваш вопрос (необязательно)</label>
-                    <textarea id="question" class="form-control" rows="4" placeholder="Опишите сферу жизни, по которой хотели бы получить консультацию (карьера, отношения, здоровье и т.д.)"></textarea>
+                    <textarea id="question" class="form-control" rows="4" name="question" placeholder="Опишите сферу жизни, по которой хотели бы получить консультацию (карьера, отношения, здоровье и т.д.)" ></textarea>
                 </div>
                 
                 <div class="form-footer">
@@ -425,44 +426,139 @@ document.addEventListener('DOMContentLoaded', function() {
             // Обработка отправки формы
             const baziForm = document.getElementById('baziForm');
             
-            baziForm.addEventListener('submit', function(e) {
+            baziForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
+
                 const submitBtn = baziForm.querySelector('.submit-btn');
                 const originalText = submitBtn.innerHTML;
-                
-                // Показать состояние загрузки
+
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Идёт расчёт...';
                 submitBtn.disabled = true;
-                
-                // Собрать данные формы
-                const formData = {
-                    name: document.getElementById('fullName').value,
-                    birthDate: document.getElementById('birthDate').value,
-                    birthTime: document.getElementById('birthTime').value,
-                    birthPlace: document.getElementById('birthPlace').value,
-                    gender: document.querySelector('input[name="gender"]:checked').value,
-                    question: document.getElementById('question').value
-                };
-                
-                console.log('Отправлены данные формы:', formData);
-                
-                // Имитация расчета (в реальном приложении здесь будет AJAX запрос)
-                setTimeout(() => {
-                    // Восстановить кнопку
+
+                const formData = new FormData();
+                formData.append('name', document.getElementById('fullName').value);
+                formData.append('birthDate', document.getElementById('birthDate').value);
+                formData.append('birthTime', document.getElementById('birthTime').value);
+                formData.append('birthPlace', document.getElementById('birthPlace').value);
+                formData.append('gender', document.querySelector('input[name="gender"]:checked')?.value || '');
+                formData.append('question', document.getElementById('question').value);
+
+                console.log('Отправлены данные формы:', Object.fromEntries(formData));
+
+                try {
+                    const url = baziForm.dataset.url;
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': getCsrfToken()
+                        }
+                    });
+
+                    const result = await response.json();
+
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
-                    
-                    // Показать результат (в реальном приложении здесь будет обработка ответа)
-                    alert('Расчёт завершён! Ваша карта Бацзы готова. В реальном приложении здесь будет отображение результатов.');
-                    
-                    // Сброс формы
-                    baziForm.reset();
-                    birthDateInput.valueAsDate = defaultBirthDate;
-                    document.getElementById('birthTime').value = '12:00';
-                    
-                }, 3000);
+
+                    if (response.ok && result.status === 'success') {
+
+                        displayBaziResult(result.data);
+
+                        baziForm.reset();
+                        document.getElementById('birthDate').valueAsDate = defaultBirthDate;
+                        document.getElementById('birthTime').value = '12:00';
+                    } else {
+                        const errors = result.errors || { general: 'Произошла ошибка при расчете карты Ба Цзы' };
+                        displayErrors(errors);
+                    }
+                } catch (error) {
+                    console.error('Ошибка запроса:', error);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    displayErrors({ general: 'Ошибка связи с сервером. Пожалуйста, попробуйте снова.' });
+                }
             });
+
+            function getCsrfToken() {
+                const cookieValue = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('csrftoken='))
+                    ?.split('=')[1];
+                return cookieValue || '';
+            }
+
+            function displayBaziResult(data) {
+                const resultDiv = document.getElementById('baziResult');
+                if (!resultDiv) {
+                    console.error('Контейнер для результатов (#baziResult) не найден');
+                    alert('Ошибка: контейнер для результатов не найден');
+                    return;
+                }
+
+                const baziCard = data.bazi_card;
+                let html = `
+                    <h2>Карта Ба Цзы для ${data.name}</h2>
+                    <p><strong>Дата рождения:</strong> ${data.birthDate} ${data.birthTime}</p>
+                    <p><strong>Место рождения:</strong> ${data.birthPlace}</p>
+                    <p><strong>Пол:</strong> ${data.gender === 'male' ? 'Мужской' : 'Женский'}</p>
+                    <p><strong>Вопрос:</strong> ${data.question || 'Не указан'}</p>
+                    <h3>Столпы</h3>
+                    <ul>
+                        <li><strong>Год:</strong> ${baziCard.year_pillar.stem} ${baziCard.year_pillar.branch} (Скрытые стволы: ${baziCard.hidden_stems.year.join(', ')})</li>
+                        <li><strong>Месяц:</strong> ${baziCard.month_pillar.stem} ${baziCard.month_pillar.branch} (Скрытые стволы: ${baziCard.hidden_stems.month.join(', ')})</li>
+                        <li><strong>День:</strong> ${baziCard.day_pillar.stem} ${baziCard.day_pillar.branch} (Скрытые стволы: ${baziCard.hidden_stems.day.join(', ')})</li>
+                        <li><strong>Час:</strong> ${baziCard.hour_pillar.stem} ${baziCard.hour_pillar.branch} (Скрытые стволы: ${baziCard.hidden_stems.hour.join(', ')})</li>
+                    </ul>
+                    <p><strong>Элемент личности:</strong> ${baziCard.personality_element}</p>
+                    <p><strong>Сила карты:</strong> ${baziCard.strength}</p>
+                    <h3>Божества</h3>
+                    <ul>
+                        <li><strong>Год:</strong> ${baziCard.deities.year_stem}</li>
+                        <li><strong>Месяц:</strong> ${baziCard.deities.month_stem}</li>
+                        <li><strong>День:</strong> ${baziCard.deities.day_stem}</li>
+                        <li><strong>Час:</strong> ${baziCard.deities.hour_stem}</li>
+                    </ul>
+                    <h3>Символические звезды</h3>
+                    <p>${baziCard.stars.join(', ') || 'Отсутствуют'}</p>
+                    <h3>Столпы Удачи</h3>
+                    <ul>
+                        ${baziCard.luck_pillars.map(p => `<li>${p.pillar} (с ${p.start_age} лет)</li>`).join('')}
+                    </ul>
+                `;
+
+                if (baziCard.active_pillar) {
+                    html += `
+                        <h3>Текущий Столп Удачи</h3>
+                        <p>${baziCard.active_pillar.pillar} (с ${baziCard.active_pillar.start_age} до ${baziCard.active_pillar.end_age} лет)</p>
+                    `;
+                }
+
+                if (baziCard.luck_pillars_errors && baziCard.luck_pillars_errors.length > 0) {
+                    html += `
+                        <h3>Ошибки расчета Столпов Удачи</h3>
+                        <ul>${baziCard.luck_pillars_errors.map(err => `<li>${err}</li>`).join('')}</ul>
+                    `;
+                }
+
+                resultDiv.innerHTML = html;
+            }
+
+            function displayErrors(errors) {
+                const resultDiv = document.getElementById('baziResult');
+                if (!resultDiv) {
+                    console.error('Контейнер для результатов (#baziResult) не найден');
+                    alert('Ошибка: контейнер для результатов не найден');
+                    return;
+                }
+
+                let errorHtml = '<h2>Ошибки</h2><ul>';
+                for (const [key, value] of Object.entries(errors)) {
+                    errorHtml += `<li>${key}: ${value}</li>`;
+                }
+                errorHtml += '</ul>';
+                resultDiv.innerHTML = errorHtml;
+                alert('Произошла ошибка при расчете карты Ба Цзы. Проверьте введенные данные.');
+            }
         });
     </script>
 {% endblock %}
