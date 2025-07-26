@@ -143,7 +143,6 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 "X-CSRFToken": getCookie("csrftoken")
             },
             body: formData,
@@ -152,11 +151,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-                closeAllModals();
+                document.getElementById('registerModal').style.display = 'none';
 
-                form.reset();
-                window.location.href = data.redirect_url;
+                window.location.reload();
             } else {
                 const errors = data.errors || ["Ошибка регистрации"];
                 alert(errors.join("\n"));
@@ -188,12 +185,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((res) => res.json()) 
             .then((data) => {
                 if (data.success) {
-                    const modal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
-                    closeAllModals();
+                    document.getElementById('loginModal').style.display = 'none';
 
-                    loginForm.reset();
-
-                    window.location.reload();  
+                    window.location.reload();
 
                 } else {
                     
