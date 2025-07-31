@@ -543,22 +543,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 resultDiv.innerHTML = html;
             }
 
-            function displayErrors(errors) {
-                const resultDiv = document.getElementById('baziResult');
-                if (!resultDiv) {
-                    console.error('Контейнер для результатов (#baziResult) не найден');
-                    alert('Ошибка: контейнер для результатов не найден');
-                    return;
-                }
-
-                let errorHtml = '<h2>Ошибки</h2><ul>';
-                for (const [key, value] of Object.entries(errors)) {
-                    errorHtml += `<li>${key}: ${value}</li>`;
-                }
-                errorHtml += '</ul>';
-                resultDiv.innerHTML = errorHtml;
-                alert('Произошла ошибка при расчете карты Ба Цзы. Проверьте введенные данные.');
-            }
         });
     </script>
 {% endblock %}
