@@ -9,7 +9,6 @@ from .utils.required_const import SEASON_TABLE, ELEMENT_TABLE, HIDDEN_STEMS_TABL
 from .utils.pillar import Pillar
 import logging
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 @require_POST
@@ -59,7 +58,8 @@ def calc_of_the_badza_card(request):
         return JsonResponse({"status": "error", "errors": errors}, status=400)
 
     try:
-        pillar = Pillar(birth_date, birth_time)
+        pillar = Pillar(birth_date, birth_time, birth_place)
+        print(pillar.birth_datetime_china)
     except Exception as e:
         return JsonResponse({"status": "error", "errors": {"birthDateTime": f"Ошибка обработки даты/времени: {str(e)}"}}, status=400)
     
@@ -323,3 +323,7 @@ def calculate_luck_pillars(year_pillar, gender, birth_datetime):
         "active_pillar": active_pillar,
         "errors": errors
     }
+
+@require_POST
+def decryption_card(request):
+    pass
