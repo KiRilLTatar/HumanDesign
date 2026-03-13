@@ -75,7 +75,7 @@ HumanDesign/
 
 После запуска приложение будет доступно по адресу:
 
-`http://localhost:8000`
+`http://localhost:8080`
 
 ### Запуск без Docker
 
